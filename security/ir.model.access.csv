@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mini_messenger_conversation,mini_messenger.conversation,model_mini_messenger_conversation,base.group_user,1,1,1,1
+access_mini_messenger_message,mini_messenger.message,model_mini_messenger_message,base.group_user,1,1,1,1
+access_mini_messenger_conversation_portal,mini_messenger.conversation,model_mini_messenger_conversation,base.group_portal,1,1,1,1
+access_mini_messenger_message_portal,mini_messenger.message,model_mini_messenger_message,base.group_portal,1,1,1,1

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mini_messenger_root"
+              name="Mini Messenger"
+              web_icon="mini_messenger,static/description/icon.png"
+              sequence="1"/>
+
+    <record id="action_mini_messenger" model="ir.actions.client">
+        <field name="name">Messenger</field>
+        <field name="tag">mini_messenger.MessengerAction</field>
+    </record>
+
+    <menuitem id="menu_mini_messenger_chat"
+              name="Chat"
+              parent="menu_mini_messenger_root"
+              action="action_mini_messenger"
+              sequence="10"/>
+</odoo>

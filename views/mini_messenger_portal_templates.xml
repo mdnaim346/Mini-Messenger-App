@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_messenger_layout" name="Portal Messenger">
+        <t t-call="portal.portal_layout">
+            <div id="messenger_root" style="height: 80vh; background: white; border-radius: 8px; overflow: hidden; margin-top: 20px;">
+                <!-- Component will be mounted here by portal_init.js -->
+            </div>
+        </t>
+    </template>
+</odoo>
