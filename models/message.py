@@ -21,8 +21,7 @@ class MiniMessengerMessage(models.Model):
         return messages
 
     def _notify_message(self, message):
-        """ Notify all conversation members via Bus """
-        notifications = []
+        """ Notify all conversation members via Bus using simple string channels """
         payload = {
             'id': message.id,
             'body': message.body,
@@ -32,10 +31,7 @@ class MiniMessengerMessage(models.Model):
         }
         
         for partner in message.conversation_id.member_ids:
-            # We use a custom string channel for each partner
-            channel = f"mini_messenger_partner_{partner.id}"
-            notifications.append([channel, 'new_message', payload])
+            channel = f"messenger_{partner.id}"
+            self.env['bus.bus']._sendone(channel, 'new_message', payload)
             
-        if notifications:
-            self.env['bus.bus']._sendmany(notifications)
-            _logger.info("Sent notifications for message %s to %s", message.id, message.conversation_id.member_ids.mapped('name'))
+        _logger.info("Sent notifications for message %s to %s", message.id, message.conversation_id.member_ids.mapped('name'))

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="mini_messenger.Messenger" owl="1">
+        <div class="o_messenger_app">
+            <!-- Sidebar -->
+            <div class="o_messenger_sidebar">
+                <div class="o_sidebar_header">
+                    <h4>Chats</h4>
+                    <button class="btn btn-primary btn-sm" t-on-click="startNewChat">
+                        <i class="fa fa-plus-circle font-sm"/> New
+                    </button>
+                </div>
+                
+                <div class="o_sidebar_search">
+                    <input type="text" class="form-control" placeholder="Search conversations..." t-model="state.searchQuery"/>
+                </div>
+
+                <div class="o_conversation_list">
+                    <t t-foreach="filteredConversations" t-as="conv" t-key="conv.id">
+                        <div class="o_conversation_item" 
+                             t-att-class="{'active': state.activeConversationId === conv.id}"
+                             t-on-click="() => this.selectConversation(conv.id)">
+                            <div class="o_avatar">
+                                <t t-esc="conv.name[0].toUpperCase()"/>
+                            </div>
+                            <div class="o_conv_info">
+                                <div class="o_conv_name" t-esc="conv.name"/>
+                                <div class="o_last_msg" t-esc="conv.lastMessage || 'No messages yet'"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                
+                <div t-if="state.showNewChatModal" class="o_new_chat_modal">
+                    <div class="o_modal_content">
+                        <h5>Select Member</h5>
+                        <div class="o_suggested_list">
+                            <t t-foreach="state.suggestedPartners" t-as="partner" t-key="partner.id">
+                                <div class="o_suggested_item" t-on-click="() => this.createNew1to1(partner.id)">
+                                    <span t-esc="partner.name"/>
+                                </div>
+                            </t>
+                        </div>
+                        <button class="btn btn-secondary w-100 mt-2" t-on-click="() => state.showNewChatModal = false">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="o_messenger_content">
+                <t t-if="state.activeConversationId">
+                    <div class="o_chat_header">
+                        <div class="o_header_name" t-esc="activeConversation.name"/>
+                    </div>
+                    
+                    <div class="o_message_list" t-ref="messageList">
+                        <t t-foreach="state.messages" t-as="msg" t-key="msg.id">
+                            <div class="o_message_row" t-att-class="{'o_message_mine': isMine(msg)}">
+                                <div class="o_message_bubble">
+                                    <div class="o_msg_author" t-if="!isMine(msg)" t-esc="msg.author_id[1]"/>
+                                    <div class="o_msg_body" t-esc="msg.body"/>
+                                    <div class="o_msg_time" t-esc="formatTime(msg.create_date)"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="o_chat_input">
+                        <textarea class="form-control" 
+                                  placeholder="Type a message..." 
+                                  t-model="state.newMessage"
+                                  t-on-keydown="onInputKeyDown"/>
+                        <button class="btn btn-primary" t-on-click="sendMessage" t-att-disabled="!state.newMessage.trim()">
+                            <i class="fa fa-paper-plane"/>
+                        </button>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="o_chat_empty">
+                        <div class="o_empty_icon">💬</div>
+                        <h3>Select a conversation to start chatting</h3>
+                        <p>Real-time communication, empowered by Odoo Bus.</p>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>
